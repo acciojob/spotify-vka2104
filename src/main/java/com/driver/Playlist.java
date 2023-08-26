@@ -2,7 +2,7 @@ package com.driver;
 
 import java.util.List;
 
-public class Playlist {
+public class       Playlist {
     private String title;
 
     public Playlist(){
