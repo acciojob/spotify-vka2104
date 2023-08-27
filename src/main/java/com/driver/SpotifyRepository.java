@@ -417,7 +417,7 @@ public class SpotifyRepository {
     public String mostPopularArtist() {
         Artist artistWithMaxLikes = Collections.max(artists, Comparator.comparingInt(Artist::getLikes));
         if(artistWithMaxLikes != null) {
-            return "Artist Name: "+artistWithMaxLikes.getName()+" likes: "+ artistWithMaxLikes.getLikes();
+            return artistWithMaxLikes.getName();
         }
         return "";
     }
@@ -425,7 +425,7 @@ public class SpotifyRepository {
     public String mostPopularSong() {
         Song songWithMaxLikes = Collections.max(songs, Comparator.comparingInt(Song::getLikes));
         if(songWithMaxLikes != null) {
-            return "Song Title: "+songWithMaxLikes.getTitle()+" likes: "+ songWithMaxLikes.getLikes();
+            return songWithMaxLikes.getTitle();
         }
         return "";
     }
