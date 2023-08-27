@@ -129,7 +129,7 @@ public class SpotifyController {
             if(updatedSong != null) {
                 return "Song and Artist are liked Successfully."+updatedSong.toString();
             } else {
-                return "issue while liking a Song.";
+                return "";
             }
         } catch (Exception e) {
             return e.getMessage();

@@ -403,7 +403,8 @@ public class SpotifyRepository {
                         throw new Exception("can't find album for given song");
                     }
                 } else {
-                    throw new Exception("User Already liked this song.");
+//                    throw new Exception("User Already liked this song.");
+                    return null;
                 }
             } else {
                 throw new Exception("Song does not exist");
