@@ -385,7 +385,7 @@ public class SpotifyRepository {
             if(song != null) {
                 if(songLikeMap != null) {
                     List<User> users = songLikeMap.get(song);
-                    if (users == null || !users.contains(user)) {
+                    if (users == null || (users != null && !users.contains(user))) {
                         Album album = findAlbumBySong(song);
                         if (album != null) {
                             Artist artist = findArtistByAlbum(album);
