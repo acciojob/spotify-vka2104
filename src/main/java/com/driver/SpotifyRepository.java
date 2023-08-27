@@ -118,15 +118,24 @@ public class SpotifyRepository {
         if(isSongAdded) return newSong;
         else return null;
     }
-    public ArrayList<Song> addSongToSongsListArray(Song newSong) {
+    public List<Song> addSongToSongsListArray(Song newSong) {
         ArrayList<Song> songsList = new ArrayList<>();
         songsList.add(newSong);
         return songsList;
     }
+    public List<Song> getSongs(Album album) {
+        return albumSongMap.get(album);
+    }
     public Song addToAlbumSongMap(String songTitle, int songLength, Album album) throws Exception {
         Song newSong = addToSongs(songTitle, songLength);
         if(newSong != null) {
-            albumSongMap.put(album, addSongToSongsListArray(newSong));
+            List<Song> existingSongs = getSongs(album);
+            if(existingSongs != null) {
+                existingSongs.add(newSong);
+                albumSongMap.put(album, existingSongs);
+            } else {
+                albumSongMap.put(album, addSongToSongsListArray(newSong));
+            }
             return newSong;
         }
         return null;
@@ -368,23 +377,27 @@ public class SpotifyRepository {
             if(song != null) {
                 List<User> users = songLikeMap.get(song);
                 if(users == null || !users.contains(user)) {
-                    Song updatedSong = updateLikeInSongs(song);
-                    Album album = findAlbumBySong(updatedSong);
+                    Album album = findAlbumBySong(song);
                     if(album != null) {
                         Artist artist = findArtistByAlbum(album);
-                        Artist updatedArtist = updateLikeInArtist(artist);
-                        if(users.isEmpty()) {
-                            List<User> newUsersList = new ArrayList<>();
-                            newUsersList.add(user);
-                            songLikeMap.put(song, newUsersList);
+                        if(artist != null) {
+                            Song updatedSong = updateLikeInSongs(song);
+                            Artist updatedArtist = updateLikeInArtist(artist);
+                            if(updatedSong != null && updatedArtist != null) {
+                                if(users == null || users.isEmpty()) {
+                                    List<User> newUsersList = new ArrayList<>();
+                                    newUsersList.add(user);
+                                    songLikeMap.put(updatedSong, newUsersList);
+                                } else {
+                                    users.add(user);
+                                    songLikeMap.put(updatedSong, users);
+                                }
+                                return updatedSong;
+                            } else {
+                                throw new Exception("Artist or Song not updated");
+                            }
                         } else {
-                            users.add(user);
-                            songLikeMap.put(song, users);
-                        }
-                        if(updatedSong != null && updatedArtist != null) {
-                            return updatedSong;
-                        } else {
-                            throw new Exception("Artist or Song not updated");
+                            throw new Exception("can't find artist for this song");
                         }
                     } else {
                         throw new Exception("can't find album for given song");
@@ -401,10 +414,18 @@ public class SpotifyRepository {
     }
 
     public String mostPopularArtist() {
-        return null;
+        Artist artistWithMaxLikes = Collections.max(artists, Comparator.comparingInt(Artist::getLikes));
+        if(artistWithMaxLikes != null) {
+            return "Artist Name: "+artistWithMaxLikes.getName()+" likes: "+ artistWithMaxLikes.getLikes();
+        }
+        return "";
     }
 
     public String mostPopularSong() {
-        return null;
+        Song songWithMaxLikes = Collections.max(songs, Comparator.comparingInt(Song::getLikes));
+        if(songWithMaxLikes != null) {
+            return "Song Title: "+songWithMaxLikes.getTitle()+" likes: "+ songWithMaxLikes.getLikes();
+        }
+        return "";
     }
 }

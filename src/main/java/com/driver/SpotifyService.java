@@ -50,10 +50,10 @@ public class SpotifyService {
     }
 
     public String mostPopularArtist() {
-        return null;
+        return spotifyRepository.mostPopularArtist();
     }
 
     public String mostPopularSong() {
-        return null;
+        return spotifyRepository.mostPopularSong();
     }
 }

@@ -15,7 +15,7 @@ public class SpotifyController {
     public String createUser(@RequestParam(name = "name") String name, String mobile){
         User newUser = spotifyService.createUser(name, mobile);
         if(newUser != null) {
-            return "User created Successfully.";
+            return "User created Successfully."+newUser.toString();
         }
         return "issue while creating User.";
     }
@@ -24,7 +24,7 @@ public class SpotifyController {
     public String createArtist(@RequestParam(name = "name") String name){
         Artist newArtist = spotifyService.createArtist(name);
         if(newArtist != null) {
-            return "Artist created Successfully.";
+            return "Artist created Successfully."+newArtist.toString();
         }
         return "issue while creating an Artist.";
     }
@@ -35,7 +35,7 @@ public class SpotifyController {
         //Create an album with given title and artist
         Album newAlbum = spotifyService.createAlbum(title, artistName);
         if(newAlbum != null) {
-            return "Album created Successfully.";
+            return "Album created Successfully."+newAlbum.toString();
         }
         return "issue while creating an Album.";
     }
@@ -47,7 +47,7 @@ public class SpotifyController {
         try {
             Song newSong = spotifyService.createSong(title, albumName, length);
             if(newSong != null) {
-                return "Song created Successfully.";
+                return "Song created Successfully."+newSong.toString();
             } else {
                 return "issue while creating a Song.";
             }
@@ -66,7 +66,7 @@ public class SpotifyController {
         try {
             Playlist newPlayList = spotifyService.createPlaylistOnLength(mobile, title, length);
             if(newPlayList != null) {
-                return "PlayList created Successfully.";
+                return "PlayList created Successfully."+newPlayList.toString();
             } else {
                 return "issue while creating a Song.";
             }
@@ -85,7 +85,7 @@ public class SpotifyController {
         try {
             Playlist newPlayList = spotifyService.createPlaylistOnName(mobile, title, songTitles);
             if(newPlayList != null) {
-                return "PlayList created Successfully.";
+                return "PlayList created Successfully."+newPlayList.toString();
             } else {
                 return "issue while creating a Song.";
             }
@@ -105,7 +105,7 @@ public class SpotifyController {
         try {
             Playlist updatedPlayList = spotifyService.findPlaylist(mobile, playlistTitle);
             if(updatedPlayList != null) {
-                return "PlayList Updated Successfully.";
+                return "PlayList Updated Successfully."+ updatedPlayList.toString();
             } else {
                 return "issue while updating a Play List.";
             }
@@ -127,7 +127,7 @@ public class SpotifyController {
         try {
             Song updatedSong = spotifyService.likeSong(mobile, songTitle);
             if(updatedSong != null) {
-                return "Song and Artist are liked Successfully.";
+                return "Song and Artist are liked Successfully."+updatedSong.toString();
             } else {
                 return "issue while liking a Song.";
             }
@@ -138,14 +138,21 @@ public class SpotifyController {
 
     @GetMapping("/popular-artist")
     public String mostPopularArtist(){
-        //Return the artist name with maximum likes
-        return "";
-
+        String res = spotifyService.mostPopularArtist();
+        if(!res.isEmpty()) {
+            return res;
+        } else {
+            return "There is no artist exist";
+        }
     }
 
     @GetMapping("/popular-song")
     public String mostPopularSong(){
-        //return the song title with maximum likes
-        return "";
+        String res = spotifyService.mostPopularSong();
+        if(!res.isEmpty()) {
+            return res;
+        } else {
+            return "There is no Song exist";
+        }
     }
 }
