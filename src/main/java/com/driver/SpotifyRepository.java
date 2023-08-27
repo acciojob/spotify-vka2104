@@ -45,9 +45,8 @@ public class SpotifyRepository {
 
     public Artist createArtist(String name) {
         Artist newArtist = new Artist(name);
-        boolean isArtistAdded = artists.add(newArtist);
-        if(isArtistAdded) return newArtist;
-        return null;
+       artists.add(newArtist);
+        return newArtist;
     }
 
     public Artist getArtistByName(String name) {
@@ -60,9 +59,8 @@ public class SpotifyRepository {
     }
     public Album addToAlbums(String title) {
         Album newAlbum = new Album(title);
-        boolean isAblubAdded = albums.add(newAlbum);
-        if(isAblubAdded) return newAlbum;
-        else return null;
+       albums.add(newAlbum);
+       return newAlbum;
     }
     public ArrayList<Album> addAlbumToAlbumListArray(Album newAlbum) {
         ArrayList<Album> albumList = new ArrayList<>();
@@ -115,9 +113,8 @@ public class SpotifyRepository {
     public Song addToSongs(String title, int length) throws Exception{
         if(getSongByName(title) != null) throw new Exception("Song already exist in the album.");
         Song newSong = new Song(title, length);
-        boolean isSongAdded = songs.add(newSong);
-        if(isSongAdded) return newSong;
-        else return null;
+        songs.add(newSong);
+        return newSong;
     }
     public List<Song> addSongToSongsListArray(Song newSong) {
         ArrayList<Song> songsList = new ArrayList<>();
@@ -191,9 +188,8 @@ public class SpotifyRepository {
     public Playlist createNewPlayList(String mobile, String title) throws Exception{
         if(getPlayListByName(mobile, title) != null) throw new Exception("Play List already Exist for this user.");
         Playlist newPlayList = new Playlist(title);
-        boolean isPlayListAdded = playlists.add(newPlayList);
-        if(isPlayListAdded) return newPlayList;
-        else return null;
+        playlists.add(newPlayList);
+        return newPlayList;
     }
 
     // add currentplaylist to arraylist( to create new)
@@ -296,16 +292,14 @@ public class SpotifyRepository {
         }
     }
     public Playlist getPlayListByTitle(String playlistTitle) {
-        if(!playlists.isEmpty()) {
+        if(playlists != null) {
             for(Playlist playlist: playlists) {
                 if(playlist.getTitle().equals(playlistTitle)) return playlist;
             }
-            return null;
-        } else {
-            return null;
         }
+        return null;
     }
-    public Playlist findPlaylist(String mobile, String playlistTitle) throws Exception {
+    public Playlist findPlaylist(String mobile, String playlistTitle) {
         Playlist playlist = getPlayListByTitle(playlistTitle);
         if(playlist != null) {
             List<User> users = playlistListenerMap.get(playlist);
@@ -345,10 +339,8 @@ public class SpotifyRepository {
                     return songData;
                 }
             }
-            return null;
-        } else {
-            return null;
         }
+        return null;
     }
     public Album findAlbumBySong(Song targetSong) {
         if(albumSongMap != null) {
@@ -383,10 +375,8 @@ public class SpotifyRepository {
                     return artistData;
                 }
             }
-            return null;
-        } else {
-            return null;
         }
+        return null;
     }
     public Song likeSong(String mobile, String songTitle) throws Exception {
         User user = getUserByMobile(mobile);
