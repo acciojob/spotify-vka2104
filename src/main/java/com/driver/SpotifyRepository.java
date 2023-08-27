@@ -397,7 +397,7 @@ public class SpotifyRepository {
                         throw new Exception("can't find album for given song");
                     }
                 } else {
-                    throw new Exception("User Already liked this song.");
+                    return null;
                 }
             } else {
                 throw new Exception("Song does not exist");
@@ -410,7 +410,7 @@ public class SpotifyRepository {
     public String mostPopularArtist() {
         Artist artistWithMaxLikes = Collections.max(artists, Comparator.comparingInt(Artist::getLikes));
         if(artistWithMaxLikes != null) {
-            return "Artist Name: "+artistWithMaxLikes.getName()+" likes: "+ artistWithMaxLikes.getLikes();
+            return artistWithMaxLikes.getName();
         }
         return "";
     }
@@ -418,8 +418,8 @@ public class SpotifyRepository {
     public String mostPopularSong() {
         Song songWithMaxLikes = Collections.max(songs, Comparator.comparingInt(Song::getLikes));
         if(songWithMaxLikes != null) {
-            return "Song Title: "+songWithMaxLikes.getTitle()+" likes: "+ songWithMaxLikes.getLikes();
+            return songWithMaxLikes.getTitle();
         }
-        return ".";
+        return "";
     }
 }
