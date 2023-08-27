@@ -39,9 +39,8 @@ public class SpotifyRepository {
 
     public User createUser(String name, String mobile) {
         User newUser = new User(name, mobile);
-        boolean isUserCreated = users.add(newUser);
-        if(isUserCreated) return newUser;
-        return null;
+        users.add(newUser);
+       return newUser;
     }
 
     public Artist createArtist(String name) {
@@ -308,14 +307,22 @@ public class SpotifyRepository {
             List<User> users = playlistListenerMap.get(playlist);
             User user = getUserByMobile(mobile);
             if(user != null) {
-                if(!users.contains(user)) {
-                    users.add(user);
-                    playlistListenerMap.put(playlist, users);
-                    return playlist;
-                } else {
+                if(users != null) {
+                    if(!users.contains(user)) {
+                        users.add(user);
+                        playlistListenerMap.put(playlist, users);
+                        return playlist;
+                    } else {
 //                    throw new Exception("Creator or Listner alredy exist in the list.");
-                    return null;
+                        return null;
+                    }
+                } else {
+                    List<User> newUsersList = new ArrayList<>();
+                    newUsersList.add(user);
+                    playlistListenerMap.put(playlist, newUsersList);
+                    return playlist;
                 }
+
             } else {
                 return null;
 //                throw new Exception("User does not exist");
@@ -387,7 +394,7 @@ public class SpotifyRepository {
                             Song updatedSong = updateLikeInSongs(song);
                             Artist updatedArtist = updateLikeInArtist(artist);
                             if(updatedSong != null && updatedArtist != null) {
-                                if(users == null || users.isEmpty()) {
+                                if(users == null) {
                                     List<User> newUsersList = new ArrayList<>();
                                     newUsersList.add(user);
                                     songLikeMap.put(updatedSong, newUsersList);
