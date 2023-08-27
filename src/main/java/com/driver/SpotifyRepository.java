@@ -104,8 +104,10 @@ public class SpotifyRepository {
     }
 
     public Song getSongByName(String title) {
-        for(Song song: songs) {
-            if(song.getTitle().equals(title)) return song;
+        if(songs != null) {
+            for(Song song: songs) {
+                if(song.getTitle().equals(title)) return song;
+            }
         }
         return null;
     }
@@ -151,8 +153,10 @@ public class SpotifyRepository {
 
     // returns user data based on user mobile number
     public User getUserByMobile(String mobile) {
-        for(User user: users) {
-            if(user.getMobile().equals(mobile)) return user;
+        if(users != null) {
+            for(User user: users) {
+                if(user.getMobile().equals(mobile)) return user;
+            }
         }
         return null;
     }
@@ -334,7 +338,7 @@ public class SpotifyRepository {
     }
 
     public Song updateLikeInSongs(Song song) {
-        if(!songs.isEmpty()) {
+        if(songs != null) {
             for(Song songData: songs) {
                 if(songData.equals(song)) {
                     songData.setLikes(songData.getLikes()+1);
@@ -347,28 +351,32 @@ public class SpotifyRepository {
         }
     }
     public Album findAlbumBySong(Song targetSong) {
-        for (Map.Entry<Album, List<Song>> entry : albumSongMap.entrySet()) {
-            Album album = entry.getKey();
-            List<Song> songs = entry.getValue();
-            if (songs.contains(targetSong)) {
-                return album;
+        if(albumSongMap != null) {
+            for (Map.Entry<Album, List<Song>> entry : albumSongMap.entrySet()) {
+                Album album = entry.getKey();
+                List<Song> songs = entry.getValue();
+                if (songs.contains(targetSong)) {
+                    return album;
+                }
             }
         }
         return null;
     }
     public Artist findArtistByAlbum(Album targetAlbum) {
-        for (Map.Entry<Artist, List<Album>> entry : artistAlbumMap.entrySet()) {
-            Artist artist = entry.getKey();
-            List<Album> albumList = entry.getValue();
-            if (albumList.contains(targetAlbum)) {
-                return artist;
+        if(artistAlbumMap != null) {
+            for (Map.Entry<Artist, List<Album>> entry : artistAlbumMap.entrySet()) {
+                Artist artist = entry.getKey();
+                List<Album> albumList = entry.getValue();
+                if (albumList.contains(targetAlbum)) {
+                    return artist;
+                }
             }
         }
         return null;
     }
 
     public Artist updateLikeInArtist(Artist artist) {
-        if(!artists.isEmpty()) {
+        if(artists != null) {
             for(Artist artistData: artists) {
                 if(artistData.equals(artist)) {
                     artistData.setLikes(artistData.getLikes()+1);
@@ -385,38 +393,42 @@ public class SpotifyRepository {
         if(user != null) {
             Song song = getSongByName(songTitle);
             if(song != null) {
-                List<User> users = songLikeMap.get(song);
-                if(users == null || !users.contains(user)) {
-                    Album album = findAlbumBySong(song);
-                    if(album != null) {
-                        Artist artist = findArtistByAlbum(album);
-                        if(artist != null) {
-                            Song updatedSong = updateLikeInSongs(song);
-                            Artist updatedArtist = updateLikeInArtist(artist);
-                            if(updatedSong != null && updatedArtist != null) {
-                                if(users == null) {
-                                    List<User> newUsersList = new ArrayList<>();
-                                    newUsersList.add(user);
-                                    songLikeMap.put(updatedSong, newUsersList);
+                if(songLikeMap != null) {
+                    List<User> users = songLikeMap.get(song);
+                    if (users == null || !users.contains(user)) {
+                        Album album = findAlbumBySong(song);
+                        if (album != null) {
+                            Artist artist = findArtistByAlbum(album);
+                            if (artist != null) {
+                                Song updatedSong = updateLikeInSongs(song);
+                                Artist updatedArtist = updateLikeInArtist(artist);
+                                if (updatedSong != null && updatedArtist != null) {
+                                    if (users == null) {
+                                        List<User> newUsersList = new ArrayList<>();
+                                        newUsersList.add(user);
+                                        songLikeMap.put(updatedSong, newUsersList);
+                                    } else {
+                                        users.add(user);
+                                        songLikeMap.put(updatedSong, users);
+                                    }
+                                    return updatedSong;
                                 } else {
-                                    users.add(user);
-                                    songLikeMap.put(updatedSong, users);
+                                    //                                throw new Exception("Artist or Song not updated");
+                                    return null;
                                 }
-                                return updatedSong;
                             } else {
-//                                throw new Exception("Artist or Song not updated");
+                                //                            throw new Exception("can't find artist for this song");
                                 return null;
                             }
                         } else {
-//                            throw new Exception("can't find artist for this song");
+                            //                        throw new Exception("can't find album for given song");
                             return null;
                         }
                     } else {
-//                        throw new Exception("can't find album for given song");
+                        //                    throw new Exception("User Already liked this song.");
                         return null;
                     }
                 } else {
-//                    throw new Exception("User Already liked this song.");
                     return null;
                 }
             } else {
@@ -428,17 +440,21 @@ public class SpotifyRepository {
     }
 
     public String mostPopularArtist() {
-        Artist artistWithMaxLikes = Collections.max(artists, Comparator.comparingInt(Artist::getLikes));
-        if(artistWithMaxLikes != null) {
-            return artistWithMaxLikes.getName();
+        if(artists != null) {
+            Artist artistWithMaxLikes = Collections.max(artists, Comparator.comparingInt(Artist::getLikes));
+            if(artistWithMaxLikes != null) {
+                return artistWithMaxLikes.getName();
+            }
         }
         return "";
     }
 
     public String mostPopularSong() {
-        Song songWithMaxLikes = Collections.max(songs, Comparator.comparingInt(Song::getLikes));
-        if(songWithMaxLikes != null) {
-            return songWithMaxLikes.getTitle();
+        if(songs != null) {
+            Song songWithMaxLikes = Collections.max(songs, Comparator.comparingInt(Song::getLikes));
+            if(songWithMaxLikes != null) {
+                return songWithMaxLikes.getTitle();
+            }
         }
         return "";
     }
