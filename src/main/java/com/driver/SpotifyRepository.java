@@ -110,8 +110,8 @@ public class SpotifyRepository {
         return null;
     }
 
-    public Song addToSongs(String title, int length) throws Exception{
-        if(getSongByName(title) != null) throw new Exception("Song already exist in the album.");
+    public Song addToSongs(String title, int length) {
+//        if(getSongByName(title) != null) throw new Exception("Song already exist in the album.");
         Song newSong = new Song(title, length);
         songs.add(newSong);
         return newSong;
@@ -124,7 +124,7 @@ public class SpotifyRepository {
     public List<Song> getSongs(Album album) {
         return albumSongMap.get(album);
     }
-    public Song addToAlbumSongMap(String songTitle, int songLength, Album album) throws Exception {
+    public Song addToAlbumSongMap(String songTitle, int songLength, Album album) {
         Song newSong = addToSongs(songTitle, songLength);
         if(newSong != null) {
             List<Song> existingSongs = getSongs(album);
