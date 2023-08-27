@@ -288,35 +288,37 @@ public class SpotifyRepository {
         }
     }
     public Playlist getPlayListByTitle(String playlistTitle) {
-        if(!playlists.isEmpty()) {
-            for(Playlist playlist: playlists) {
-                if(playlist.getTitle().equals(playlistTitle)) return playlist;
-            }
-            return null;
-        } else {
-            return null;
+        for(Playlist playlist: playlists) {
+            if(playlist.getTitle().equals(playlistTitle)) return playlist;
         }
+        return null;
+
     }
     public Playlist findPlaylist(String mobile, String playlistTitle) throws Exception {
         Playlist playlist = getPlayListByTitle(playlistTitle);
         if(playlist != null) {
-            List<User> users = playlistListenerMap.get(playlist);
             User user = getUserByMobile(mobile);
             if(user != null) {
-                if(users != null) {
-                    if(!users.contains(user)) {
-                        users.add(user);
-                        playlistListenerMap.put(playlist, users);
-                        return playlist;
+                if(playlistListenerMap.containsKey(playlist)) {
+                    List<User> users = playlistListenerMap.get(playlist);
+                    if(users != null) {
+                        if(!users.contains(user)) {
+                            users.add(user);
+                            playlistListenerMap.put(playlist, users);
+                        } else {
+                            throw new Exception("Creator or Listner alredy exist in the list.");
+                        }
                     } else {
-                        throw new Exception("Creator or Listner alredy exist in the list.");
+                        List<User> newUsers = new ArrayList<>();
+                        newUsers.add(user);
+                        playlistListenerMap.put(playlist, newUsers);
                     }
                 } else {
                     List<User> newUsers = new ArrayList<>();
                     newUsers.add(user);
                     playlistListenerMap.put(playlist, newUsers);
-                    return playlist;
                 }
+                return playlist;
             } else {
                 throw new Exception("User does not exist");
             }
