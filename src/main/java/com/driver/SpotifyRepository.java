@@ -313,13 +313,16 @@ public class SpotifyRepository {
                     playlistListenerMap.put(playlist, users);
                     return playlist;
                 } else {
-                    throw new Exception("Creator or Listner alredy exist in the list.");
+//                    throw new Exception("Creator or Listner alredy exist in the list.");
+                    return null;
                 }
             } else {
-                throw new Exception("User does not exist");
+                return null;
+//                throw new Exception("User does not exist");
             }
         } else {
-            throw new Exception("Playlist does not exist");
+            return null;
+//            throw new Exception("Playlist does not exist");
         }
     }
 
@@ -394,13 +397,16 @@ public class SpotifyRepository {
                                 }
                                 return updatedSong;
                             } else {
-                                throw new Exception("Artist or Song not updated");
+//                                throw new Exception("Artist or Song not updated");
+                                return null;
                             }
                         } else {
-                            throw new Exception("can't find artist for this song");
+//                            throw new Exception("can't find artist for this song");
+                            return null;
                         }
                     } else {
-                        throw new Exception("can't find album for given song");
+//                        throw new Exception("can't find album for given song");
+                        return null;
                     }
                 } else {
 //                    throw new Exception("User Already liked this song.");

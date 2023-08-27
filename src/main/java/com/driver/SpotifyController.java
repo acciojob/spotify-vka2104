@@ -17,7 +17,7 @@ public class SpotifyController {
         if(newUser != null) {
             return "User created Successfully."+newUser.toString();
         }
-        return "issue while creating User.";
+        return "";
     }
 
     @PostMapping("/add-artist")
@@ -107,7 +107,7 @@ public class SpotifyController {
             if(updatedPlayList != null) {
                 return "PlayList Updated Successfully."+ updatedPlayList.toString();
             } else {
-                return "issue while updating a Play List.";
+                return "";
             }
         } catch (Exception e) {
             return e.getMessage();
