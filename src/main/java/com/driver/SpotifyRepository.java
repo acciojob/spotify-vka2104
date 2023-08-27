@@ -419,7 +419,26 @@ public class SpotifyRepository {
                         return null;
                     }
                 } else {
-                    return null;
+                    Album album = findAlbumBySong(song);
+                    if (album != null) {
+                        Artist artist = findArtistByAlbum(album);
+                        if (artist != null) {
+                            Song updatedSong = updateLikeInSongs(song);
+                            Artist updatedArtist = updateLikeInArtist(artist);
+                            if (updatedSong != null && updatedArtist != null) {
+                                List<User> newUsersList = new ArrayList<>();
+                                newUsersList.add(user);
+                                songLikeMap.put(updatedSong, newUsersList);
+                                return updatedSong;
+                            }  else {
+                                return null;
+                            }
+                        }  else {
+                            return null;
+                        }
+                    } else {
+                        return null;
+                    }
                 }
             } else {
                 throw new Exception("Song does not exist");
